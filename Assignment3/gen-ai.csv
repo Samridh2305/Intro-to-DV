@@ -1,0 +1,15 @@
+﻿occupation,man,woman,ambiguous,total
+architect,237,56,7,300
+lawyer,248,45,7,300
+politician,271,23,6,300
+doctor,262,20,18,300
+ceo,281,16,3,300
+judge,262,10,28,300
+engineer,298,1,1,300
+janitor,267,0,33,300
+dishwasher,162,88,50,300
+fast-food worker,118,113,69,300
+cashier,37,242,21,300
+teacher,36,228,36,300
+social worker,29,255,16,300
+housekeeper,0,279,21,300
