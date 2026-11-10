@@ -1,0 +1,84 @@
+saved fig1_yearly_trend
+saved fig2_agencies
+saved fig3_size_distribution
+saved fig4_cause_shares
+saved fig5_big_fires_map
+saved fig6_month_heatmap
+
+Numbers used in the report
+------------------------------------------------------------
+rows in file                                            448618
+rows 1980-2025                                          340179
+prescribed burns removed                                438
+duplicate rows removed                                  1201
+duplicate area removed (ha)                             82,891.8
+longitudes with sign fixed                              83
+fires with impossible location                          117
+fires with unknown month                                3459
+area with unknown month (ha)                            1,834,335.4
+fires with 0 ha                                         29525
+share missing OUT_DATE                                  0.378
+fires after cleaning                                    338540
+mean fires/yr 1980-89                                   8,691.1
+mean fires/yr 2016-25                                   5,715.5
+mean area/yr 1980-89 (Mha)                              2.739
+mean area/yr 2016-25 (Mha)                              4.652
+median area/yr (Mha)                                    1.932
+2023 area (Mha)                                         17.6
+2025 area (Mha)                                         8.705
+area ranking                                            [2023, 2025, 1989, 1995, 1981]
+fires > 200 ha per yr, 1980-89                          333.5
+fires > 200 ha per yr, 2016-25                          436.6
+fires > 200 ha in 2023                                  953
+fires > 200 ha in 2025                                  529
+previous max fires > 200 ha (year, n)                   (1989, 751)
+2023: share of area from fires >= 10,000 ha             0.912
+2023: lightning share of area                           0.921
+BC change 1980s -> 2016-25 (%)                          -43.0
+ON change 1980s -> 2016-25 (%)                          -59.2
+AB change 1980s -> 2016-25 (%)                          14.4
+QC change 1980s -> 2016-25 (%)                          -51.2
+SK change 1980s -> 2016-25 (%)                          -38.8
+MB change 1980s -> 2016-25 (%)                          -47.1
+NT change 1980s -> 2016-25 (%)                          -42.7
+YT change 1980s -> 2016-25 (%)                          -19.2
+PC change 1980s -> 2016-25 (%)                          137.8
+agencies shown                                          ['BC', 'ON', 'AB', 'QC', 'SK', 'MB', 'NB', 'NT', 'NS', 'YT', 'NL', 'PC']
+fires/yr 1980-89, agencies reporting since 1980         8,427.2
+fires/yr 2016-25, agencies reporting since 1980         5,157.1
+fires > 200 ha                                          15914
+share of fires > 200 ha                                 0.047
+share of area from fires > 200 ha                       0.990
+fires >= 10,000 ha                                      2613
+share of fires >= 10,000 ha                             0.008
+share of area from fires >= 10,000 ha                   0.802
+share of fires < 1 ha (all fires)                       0.715
+share of area from fires < 1 ha                         0.000
+fires recorded under 0.0075 ha                          871
+Lightning: % of fires                                   45.7
+Lightning: % of area                                    87.5
+Lightning: % of fires > 200 ha                          83.2
+Lightning: median size (ha)                             0.200
+Human: % of fires                                       51.3
+Human: % of area                                        8.815
+Human: % of fires > 200 ha                              12.9
+Human: median size (ha)                                 0.100
+Unknown: % of fires                                     3.006
+Unknown: % of area                                      3.656
+Unknown: % of fires > 200 ha                            3.814
+Unknown: median size (ha)                               0.400
+large-fire area north of 55N (%)                        68.8
+large-fire area by agency (%)                           {'NT': 22.0, 'SK': 19.5, 'MB': 12.4, 'QC': 12.1, 'AB': 9.1, 'BC': 8.4, 'ON': 6.7, 'YT': 5.6, 'PC': 3.3, 'NL': 0.8, 'NB': 0.1, 'NS': 0.0}
+human large-fire area south of 55N (%)                  57.7
+area from fires starting Oct-Mar (%)                    0.507
+median % of area from fires starting by end of May      15.0
+2023 % of area from fires starting by end of May        37.2
+2025 % of area from fires starting by end of May        49.0
+median May area (Mha)                                   0.193
+May 2023 area (Mha)                                     6.453
+May 2025 area (Mha)                                     4.250
+years with largest May area                             [2023, 2025, 1995, 1980]
+June / July 2023 area (Mha)                             (4.79, 5.02)
+1980: % area by end of May, total Mha                   (48.4, 4.82)
+2016: % area by end of May, total Mha                   (53.3, 1.31)
+2019: % area by end of May, total Mha                   (59.4, 1.79)

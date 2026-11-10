@@ -1,0 +1,15 @@
+# python
+.venv/
+__pycache__/
+
+# data: keep only the zip of our NFDB copy and the province outlines
+data/*
+!data/NFDB_point_txt.zip
+!data/boundaries/
+data/boundaries/*.zip
+
+# latex build files
+report/*.aux
+report/*.log
+report/*.out
+report/*.synctex.gz
