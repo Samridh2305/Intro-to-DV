@@ -520,12 +520,14 @@ def fig_heatmap(df):
 # ---------------------------------------------------------------------------
 
 def print_notes():
-    print("\nNumbers used in the report")
-    print("-" * 60)
+    lines = ["Numbers used in the report", "-" * 60]
     for k, v in notes.items():
         if isinstance(v, float):
             v = f"{v:,.3f}" if abs(v) < 10 else f"{v:,.1f}"
-        print(f"{k:55s} {v}")
+        lines.append(f"{k:55s} {v}")
+    print("\n" + "\n".join(lines))
+    # also keep a copy next to the figures
+    (OUT / "numbers_used_in_report.txt").write_text("\n".join(lines) + "\n")
 
 
 def main():

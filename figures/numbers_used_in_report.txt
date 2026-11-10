@@ -1,10 +1,3 @@
-saved fig1_yearly_trend
-saved fig2_agencies
-saved fig3_size_distribution
-saved fig4_cause_shares
-saved fig5_big_fires_map
-saved fig6_month_heatmap
-
 Numbers used in the report
 ------------------------------------------------------------
 rows in file                                            448618
