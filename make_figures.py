@@ -155,7 +155,8 @@ def load_fires():
 
 def save(fig, name):
     OUT.mkdir(exist_ok=True)
-    fig.savefig(OUT / f"{name}.pdf")
+    # no creation date in the PDF, so re-running gives the exact same file
+    fig.savefig(OUT / f"{name}.pdf", metadata={"CreationDate": None})
     fig.savefig(OUT / f"{name}.png")
     plt.close(fig)
     print("saved", name)
