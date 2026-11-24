@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Assignment 5 Report</title>
+<style>
+  @page { size: Letter; margin: 2cm 2cm 2cm 2cm; }
+  body { font-family: "Segoe UI", Arial, sans-serif; font-size: 10.5pt; line-height: 1.45; color: #1a1a1a; }
+  h1 { font-size: 18pt; margin: 0 0 4pt; }
+  h2 { font-size: 13.5pt; margin: 18pt 0 6pt; border-bottom: 1px solid #ccc; padding-bottom: 3pt; break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p, li { margin: 4pt 0; }
+  ul { padding-left: 18pt; margin: 4pt 0; }
+  .meta { color: #555; margin-bottom: 10pt; }
+  code { font-family: Consolas, monospace; font-size: 9.5pt; background: #f3f3f3; padding: 0 2pt; border-radius: 2px; }
+  table { border-collapse: collapse; width: 100%; margin: 6pt 0; font-size: 9.5pt; break-inside: avoid; }
+  th, td { border: 1px solid #ccc; padding: 3pt 6pt; text-align: left; vertical-align: top; }
+  th { background: #f0f0f0; }
+  figure { margin: 8pt 0; text-align: center; break-inside: avoid; }
+  figure img { max-width: 100%; }
+  figcaption { font-size: 9pt; color: #555; margin-top: 2pt; }
+  .row { display: flex; gap: 8pt; }
+  .row figure { flex: 1; }
+</style>
+</head>
+<body>
+
+<h1>Assignment 5 — Interactive Visualizations: Diamond Weights and Baby Names</h1>
+<div class="meta">Intro to Data Visualization (Fall 2026) · Group members: <em>&lt;add names and student numbers&gt;</em></div>
+
+<h2>1. Overview and how to run</h2>
+<p>The submission contains <code>assignment5.ipynb</code>, the two data files (<code>diamonds.csv</code>, <code>names.csv</code>) and this report.
+The notebook targets Python 3.12.12 with pandas 3.0.6, matplotlib 3.11.2, seaborn 0.13.2 and ipywidgets 8.1.9, and imports nothing else.
+Run all cells from top to bottom. Each question ends in an interactive widget panel, and its figure is redrawn whenever a control changes.</p>
+<p>Both questions use the same pattern. A plain plotting function takes the widget values as arguments (<code>draw_heatmap(origin)</code>, <code>draw_names(sex_label, text)</code>).
+<code>widgets.interactive_output</code> connects that function to the widgets, and a <code>VBox</code> stacks the controls above the figure.
+Because the plotting logic is separate from the widgets, each function can be called and tested directly. It also means each redraw clears the previous figure, so figures do not pile up.</p>
+
+<h2>2. Question 1 — Interactive heat map of average diamond weight</h2>
+
+<h3>2.1 Data preparation</h3>
+<ul>
+  <li>The dropdown labels <em>Natural</em>, <em>Lab</em> and <em>All</em> map to values of the <code>type</code> column through a dictionary (<code>natural</code>, <code>lab</code>, and no filter).</li>
+  <li><code>mean_carat_table(origin)</code> filters the rows and builds a colour × clarity table of the mean <code>carat</code> with <code>pivot_table</code>.
+      It then <code>reindex</code>es the rows to D → J and the columns to SI2 → IF.
+      The axes therefore follow the grading scale, not alphabetical order, and colourless, internally flawless diamonds land in the top-right corner as required.</li>
+  <li>The data has no missing values. One combination has no diamonds at all: lab-grown <strong>J / IF</strong>. Reindexing keeps it as <code>NaN</code> rather than dropping the row or column.</li>
+</ul>
+
+<h3>2.2 Design decisions</h3>
+<ul>
+  <li><strong>Sequential colour map (<code>mako</code>).</strong> Mean carat is an ordered quantity with no meaningful midpoint, so a single-direction lightness ramp suits it. Dark cells are light diamonds and pale cells are heavy ones.</li>
+  <li><strong>Fixed scale (0.5–1.4).</strong> The colour bar does not rescale to each filter, so a colour means the same weight in every view and <em>Natural</em> and <em>Lab</em> can be compared directly. Tick marks are placed every 0.1 carat and the colour bar is labelled “Average carat”, so it can be read without the caption.
+      Values outside the range are shown at the end colour. This only affects the lab view, where some cells exceed 1.4.</li>
+  <li><strong>Square cells</strong> (<code>square=True</code>) keep the grid even, so no category looks more important because of its cell shape.</li>
+  <li><strong>Missing data is hatched.</strong> An empty cell would show the white background, which looks almost the same as the palest <code>mako</code> colour (≈1.4 carats). The axes background is drawn with grey diagonal hatching instead, so “no diamonds” cannot be mistaken for “very heavy diamonds”.</li>
+</ul>
+
+<h3>2.3 Result</h3>
+<div class="row">
+  <figure><img src="report_figs/q1_natural.png" alt="Heatmap of average carat for natural diamonds"><figcaption>Figure 1. Origin = Natural (matches the reference figure).</figcaption></figure>
+  <figure><img src="report_figs/q1_lab.png" alt="Heatmap of average carat for lab-grown diamonds"><figcaption>Figure 2. Origin = Lab (J / IF has no diamonds, shown hatched).</figcaption></figure>
+</div>
+<p>For natural diamonds, the heaviest stones (about 1.1–1.2 carats) have the poorest clarity (SI2) and the most colour (H–J). Colourless, higher-clarity stones average close to 0.5 carats.
+Lab-grown diamonds are heavier almost everywhere, and several cells reach or exceed the top of the scale (D/E-IF average about 2.5–2.75 carats).
+The trade-off between size and quality seen in natural stones therefore largely disappears for manufactured ones. The <em>All</em> view mixes the two and sits in between.</p>
+
+<h2>3. Question 2 — Filtering experience: top baby names</h2>
+
+<h3>3.1 Data preparation</h3>
+<ul>
+  <li><code>rank_table(sex)</code> takes the names ranked 1–100 in 2020 for one sex. Using <code>rank &lt;= 100</code> keeps tied names together; boys have a three-way tie at 98, which still gives exactly 100 names.
+      It then pivots every year of those names into a year × name table of ranks, reindexed to 1996–2020.</li>
+  <li>When a name was outside the top 1000 in a year, the table holds <code>NaN</code>, and matplotlib draws a <strong>gap</strong> rather than inventing a rank. Ivy, for example, only appears from 2001.</li>
+  <li>The two tables (boys and girls) do not depend on the widgets, so they are computed once and stored in <code>RANKS</code>. Each keystroke then only re-plots, which keeps the text box responsive.</li>
+</ul>
+
+<h3>3.2 Interaction</h3>
+<ul>
+  <li><strong>Toggle:</strong> a <code>ToggleButtons</code> widget with the options “Baby boy names” and “Baby girl names” selects which <code>RANKS</code> table is drawn.</li>
+  <li><strong>Name box:</strong> <code>parse_names</code> upper-cases the input (the data is stored in capitals, so matching ignores case), splits it on spaces and removes duplicates while keeping the typed order.
+      It returns three lists: names to highlight (the first six matches), matches beyond the sixth, and names not in the 2020 top 100.</li>
+  <li><strong>Feedback:</strong> a small grey note under the text box lists names that were not found and names beyond the limit of six. That way a user who mistypes a name, or picks one from the other sex, sees why it is not highlighted.</li>
+  <li><strong>Colours</strong> are assigned in typing order from the six ONS colours. A name keeps its colour when more names are added after it.</li>
+</ul>
+
+<h3>3.3 Requirement checklist</h3>
+<table>
+  <tr><th>Requirement</th><th>Implementation</th></tr>
+  <tr><td>Top 100 names of 2020 as faded grey lines</td><td>One <code>ax.plot</code> call draws all 100 columns in grey (<code>alpha=0.3</code>, width 1, drawn underneath)</td></tr>
+  <tr><td>Boy / girl toggle</td><td><code>ToggleButtons</code>, value mapped to <code>sex</code></td></tr>
+  <tr><td>Multiple names, space-separated, case-insensitive</td><td><code>text.upper().split()</code>, de-duplicated</td></tr>
+  <tr><td>Highlighted line with a point at each year</td><td>Line of width 2 plus a separate <code>marker="o"</code> layer, drawn on top (<code>zorder=3</code>). Only the line is labelled, so the legend shows a plain line like the original</td></tr>
+  <tr><td>Maximum 6 names; the six given colours</td><td><code>found[:6]</code>, zipped with <code>#206095 #004662 #A8BD3A #27A0CC #118C7B #F66068</code></td></tr>
+  <tr><td>Legend names capitalised</td><td><code>name.capitalize()</code> (e.g. OTIS → Otis), legend in the lower right</td></tr>
+  <tr><td>Inverted y-axis; ticks 1, 100 … 1000; horizontal grid</td><td><code>invert_yaxis()</code>, <code>set_yticks([1, 100, …, 1000])</code>, <code>grid(axis="y")</code></td></tr>
+  <tr><td>x ticks every 2 years</td><td><code>set_xticks(range(1996, 2021, 2))</code></td></tr>
+  <tr><td>Title; no axis labels; no left/top/right borders</td><td>Title “Popularity ranking (1 being the most popular)”; no x/y labels set; three spines hidden</td></tr>
+</table>
+
+<h3>3.4 Design decisions</h3>
+<ul>
+  <li><strong>Context plus focus.</strong> The 100 faint grey lines show the overall pattern: names in the 2020 top 100 came from very different ranks in 1996 and converge at the top.
+      The chosen names are drawn in saturated colours on top, so the eye goes to them first. Light grey with low opacity keeps 100 overlapping lines from turning into a solid block.</li>
+  <li><strong>Inverted y-axis.</strong> Rank 1 is at the top, so a rising line means a name is becoming more popular. Tick marks and grid lines at 1, 100, …, 1000 let the reader trace any point across to its rank.</li>
+  <li><strong>Minimal axes.</strong> As in the ONS original, the left, right and top borders and the axis labels are removed. The title states what the y-axis measures, and the years need no label.</li>
+  <li><strong>Legend position.</strong> All highlighted names are in the top 100 by 2020, so the lower right of the chart is nearly always empty. The legend goes there to avoid covering the lines.</li>
+</ul>
+
+<figure><img src="report_figs/q2_boys.png" style="width:78%" alt="Boys: Otis, Mohammad, Charlie and Bobby highlighted"><figcaption>Figure 3. Boys, input “otis mohammad charlie bobby” (matches the reference).</figcaption></figure>
+<figure><img src="report_figs/q2_girls.png" style="width:78%" alt="Girls: six names highlighted"><figcaption>Figure 4. Girls, six names. Ivy’s line starts in 2001 (gap before).</figcaption></figure>
+
+<h2>4. Testing</h2>
+<p>The notebook was run top to bottom in a fresh Jupyter kernel in the pinned environment, with no errors or warnings in any cell.
+Both plotting functions were also called directly with Python warnings turned into errors, for every dropdown option and these name inputs:
+mixed case and repeated names (<code>OTIS Otis oTiS</code> → one line), eight names (first six highlighted, the rest reported),
+an unknown name, an empty or whitespace-only box, and a boy’s name while “Baby girl names” is selected (reported as not found).</p>
+
+<h2>5. Attribution</h2>
+<ul>
+  <li>Data and the original visualization: UK Office for National Statistics, <em>Baby names in England and Wales: 2020</em>. The diamonds data was provided with the assignment.</li>
+  <li>Library documentation consulted: seaborn <code>heatmap</code>, matplotlib Axes and spines, ipywidgets <code>interactive_output</code>, <code>ToggleButtons</code>, <code>Dropdown</code> and <code>Text</code>, and pandas <code>pivot_table</code> / <code>pivot</code>.</li>
+  <li>Generative AI: Claude (Anthropic) was used to help draft the notebook code and this report. <em>&lt;Group: describe how you used, checked and modified this output, and any other help received.&gt;</em></li>
+</ul>
+
+</body>
+</html>
